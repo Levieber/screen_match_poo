@@ -8,10 +8,10 @@ public class Series extends Title {
 
     public Series(String name, int yearLaunch, boolean planIncluded, int seasons, int episodesPerSeason, int durationInMinutesPerEpisode, boolean finished) {
         super(name, yearLaunch, seasons * episodesPerSeason * durationInMinutesPerEpisode, planIncluded);
-        this.seasons = seasons;
-        this.episodesPerSeason = episodesPerSeason;
-        this.durationInMinutesPerEpisode = durationInMinutesPerEpisode;
-        this.finished = finished;
+        setSeasons(seasons);
+        setEpisodesPerSeason(episodesPerSeason);
+        setDurationInMinutesPerEpisode(durationInMinutesPerEpisode);
+        setFinished(finished);
     }
 
     public int getSeasons() {
@@ -52,8 +52,8 @@ public class Series extends Title {
     }
 
     @Override
-    public String toString() {
-        return """
+    public void showTechnicalSheet() {
+        System.out.printf("""
                 Nome: %s
                 Ano de lançamento: %d
                 Quantidade de avaliações: %d
@@ -62,7 +62,7 @@ public class Series extends Title {
                 Duração: %d minutos
                 Quantidade de temporadas: %d
                 Média de duração por episódio: %d minutes
-                Finalizada: %s""".formatted(
+                Finalizada: %s%n""",
                 getName(),
                 getYearLaunch(),
                 getTotalRating(),
@@ -73,5 +73,10 @@ public class Series extends Title {
                 durationInMinutesPerEpisode,
                 finished ? "sim" : "não"
         );
+    }
+
+    @Override
+    public String toString() {
+        return "Série: %s".formatted(super.toString());
     }
 }

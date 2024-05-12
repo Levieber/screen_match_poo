@@ -3,7 +3,7 @@ package br.com.levieber.screenmatch.domain;
 import br.com.levieber.screenmatch.domain.interfaces.Rateable;
 
 public class Movie extends Title implements Rateable {
-    private String director;
+    private final String director;
 
     public Movie(String name, int yearLaunch, int durationInMinutes, boolean planIncluded, String director) {
         super(name, yearLaunch, durationInMinutes, planIncluded);
@@ -14,24 +14,21 @@ public class Movie extends Title implements Rateable {
         return director;
     }
 
-    public void setDirector(String director) {
-        this.director = director;
-    }
-
     @Override
     public int getRating() {
         return Math.clamp((int)getAverageRating() / 2, 0, 5);
     }
 
-    public String toString() {
-        return """
+    @Override
+    public void showTechnicalSheet() {
+        System.out.printf("""
                 Nome: %s
                 Ano de lançamento: %d
                 Quantidade de avaliações: %d
                 Média de avaliação: %.1f
                 Incluído no plano: %s
                 Duração: %d minutos
-                Dirigido por: %s""".formatted(
+                Dirigido por: %s%n""",
                 getName(),
                 getYearLaunch(),
                 getTotalRating(),
@@ -40,5 +37,10 @@ public class Movie extends Title implements Rateable {
                 getDurationInMinutes(),
                 director
         );
+    }
+
+    @Override
+    public String toString() {
+        return "Filme: %s".formatted(super.toString());
     }
 }

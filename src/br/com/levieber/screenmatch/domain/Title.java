@@ -1,10 +1,10 @@
 package br.com.levieber.screenmatch.domain;
 
-public class Title {
-    private String name;
-    private int yearLaunch;
-    private int durationInMinutes;
-    private boolean planIncluded;
+public class Title implements Comparable<Title> {
+    private final String name;
+    private final int yearLaunch;
+    private final int durationInMinutes;
+    private final boolean planIncluded;
     private double sumRating = 0;
     private int totalRating = 0;
 
@@ -35,22 +35,6 @@ public class Title {
         return totalRating;
     }
 
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public void setYearLaunch(int yearLaunch) {
-        this.yearLaunch = yearLaunch;
-    }
-
-    public void setDurationInMinutes(int durationInMinutes) {
-        this.durationInMinutes = durationInMinutes;
-    }
-
-    public void setPlanIncluded(boolean planIncluded) {
-        this.planIncluded = planIncluded;
-    }
-
     public double getAverageRating() {
         return sumRating / totalRating;
     }
@@ -60,14 +44,14 @@ public class Title {
         totalRating++;
     }
 
-    public String toString() {
-        return """
+    public void showTechnicalSheet() {
+        System.out.printf("""
                 Nome: %s
                 Ano de lançamento: %d
                 Quantidade de avaliações: %d
                 Média de avaliação: %.1f
                 Incluído no plano: %s
-                Duração: %d minutos""".formatted(
+                Duração: %d minutos%n""",
                 name,
                 yearLaunch,
                 totalRating,
@@ -75,5 +59,14 @@ public class Title {
                 planIncluded ? "sim" : "não",
                 durationInMinutes
         );
+    }
+
+    public String toString() {
+        return "%s (%d)".formatted(name, yearLaunch);
+    }
+
+    @Override
+    public int compareTo(Title o) {
+        return name.compareTo(o.getName());
     }
 }

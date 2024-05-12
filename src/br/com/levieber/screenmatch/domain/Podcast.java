@@ -3,21 +3,17 @@ package br.com.levieber.screenmatch.domain;
 import br.com.levieber.screenmatch.domain.interfaces.Rateable;
 
 public class Podcast extends Audio implements Rateable {
-    private String host;
+    private final String host;
     private String description;
 
     public Podcast(String name, int yearLaunch, int durationInMinutes, boolean planIncluded, String host, String description) {
         super(name, yearLaunch, durationInMinutes, planIncluded);
         this.host = host;
-        this.description = description;
+        setDescription(description);
     }
 
     public String getHost() {
         return host;
-    }
-
-    public void setHost(String host) {
-        this.host = host;
     }
 
     public String getDescription() {
