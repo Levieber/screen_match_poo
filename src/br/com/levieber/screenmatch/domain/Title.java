@@ -1,18 +1,45 @@
 package br.com.levieber.screenmatch.domain;
 
+import br.com.levieber.screenmatch.utils.TitleOmdb;
+
+import java.time.Year;
+
 public class Title implements Comparable<Title> {
     private final String name;
     private final int yearLaunch;
     private final int durationInMinutes;
-    private final boolean planIncluded;
+    private boolean planIncluded;
     private double sumRating = 0;
     private int totalRating = 0;
 
     public Title(String name, int yearLaunch, int durationInMinutes, boolean planIncluded) {
+        var currentYear = Year.now().getValue();
+        if (yearLaunch > currentYear) {
+            throw new FutureYearLaunchException();
+        }
         this.name = name;
         this.yearLaunch = yearLaunch;
         this.durationInMinutes = durationInMinutes;
-        this.planIncluded = planIncluded;
+        setPlanIncluded(planIncluded);
+    }
+
+    public Title(TitleOmdb titleOmdb) {
+        this.name = titleOmdb.title();
+        int yearLaunch;
+        int durationInMinutes;
+        try {
+            var currentYear = Year.now().getValue();
+            yearLaunch = Integer.parseInt(titleOmdb.year().replaceAll("\\D", ""));
+            if (yearLaunch > currentYear) {
+                throw new FutureYearLaunchException();
+            }
+            durationInMinutes = Integer.parseInt(titleOmdb.runtime().split(" ")[0]);
+        } catch (NumberFormatException e) {
+            durationInMinutes = 0;
+            yearLaunch = 0;
+        }
+        this.durationInMinutes = durationInMinutes;
+        this.yearLaunch = yearLaunch;
     }
 
     public String getName() {
@@ -31,11 +58,18 @@ public class Title implements Comparable<Title> {
         return planIncluded;
     }
 
+    public void setPlanIncluded(boolean planIncluded) {
+        this.planIncluded = planIncluded;
+    }
+
     public int getTotalRating() {
         return totalRating;
     }
 
     public double getAverageRating() {
+        if (totalRating == 0 || sumRating == 0) {
+            return 0;
+        }
         return sumRating / totalRating;
     }
 
@@ -61,8 +95,9 @@ public class Title implements Comparable<Title> {
         );
     }
 
+    @Override
     public String toString() {
-        return "%s (%d)".formatted(name, yearLaunch);
+        return "%s (%d / %d minutos) ".formatted(name, yearLaunch, durationInMinutes);
     }
 
     @Override

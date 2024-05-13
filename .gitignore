@@ -25,5 +25,11 @@ bin/
 ### VS Code ###
 .vscode/
 
+### Environment Variables ###
+.env
+
+### Test ###
+movies.*
+
 ### Mac OS ###
 .DS_Store
